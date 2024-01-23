@@ -1,0 +1,74 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class Ahorcado {
+    public static void main(String[] args) {
+        String[] palabras = {"java", "programacion", "ahorcado", "computadora", "codigo", "openai"};
+        String palabraSecreta = seleccionarPalabra(palabras);
+        char[] palabraAdivinada = new char[palabraSecreta.length()];
+        int intentosRestantes = 6;
+
+        // Inicializar la palabra adivinada con guiones bajos
+        for (int i = 0; i < palabraAdivinada.length; i++) {
+            palabraAdivinada[i] = '_';
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (intentosRestantes > 0) {
+            System.out.println("Palabra a adivinar: " + String.valueOf(palabraAdivinada));
+            System.out.println("Intentos restantes: " + intentosRestantes);
+            System.out.print("Ingrese una letra: ");
+            char letra = scanner.next().charAt(0);
+
+            if (adivinarLetra(letra, palabraSecreta, palabraAdivinada)) {
+                System.out.println("¡Bien! Has adivinado una letra.");
+            } else {
+                System.out.println("Incorrecto. Pierdes un intento.");
+                intentosRestantes--;
+            }
+
+            if (palabraDescubierta(palabraAdivinada)) {
+                System.out.println("¡Felicidades! Has adivinado la palabra: " + palabraSecreta);
+                break;
+            }
+        }
+
+        if (intentosRestantes == 0) {
+            System.out.println("Lo siento, has agotado tus intentos. La palabra era: " + palabraSecreta);
+        }
+
+        scanner.close();
+    }
+
+    // Método para seleccionar una palabra al azar de la lista
+    private static String seleccionarPalabra(String[] palabras) {
+        Random random = new Random();
+        int indice = random.nextInt(palabras.length);
+        return palabras[indice];
+    }
+
+    // Método para adivinar una letra en la palabra
+    private static boolean adivinarLetra(char letra, String palabraSecreta, char[] palabraAdivinada) {
+        boolean acierto = false;
+
+        for (int i = 0; i < palabraSecreta.length(); i++) {
+            if (palabraSecreta.charAt(i) == letra) {
+                palabraAdivinada[i] = letra;
+                acierto = true;
+            }
+        }
+
+        return acierto;
+    }
+
+    // Método para verificar si se ha adivinado la palabra completa
+    private static boolean palabraDescubierta(char[] palabraAdivinada) {
+        for (char letra : palabraAdivinada) {
+            if (letra == '_') {
+                return false;
+            }
+        }
+        return true;
+    }
+}
